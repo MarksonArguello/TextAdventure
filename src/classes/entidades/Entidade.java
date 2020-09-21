@@ -1,7 +1,9 @@
 package classes.entidades;
 
 
-public abstract class Entidade {
+import classes.ObjetosDoMapa;
+
+public abstract class Entidade extends ObjetosDoMapa {
     protected int pontosDeVida;
     protected int danoDeAtaque;
 
