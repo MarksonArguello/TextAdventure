@@ -3,7 +3,6 @@ package classes.tabuleiro;
 import java.util.Random;
 import java.util.Scanner;
 
-import aplicacao.Game;
 import classes.ObjetosDoMapa;
 import classes.entidades.*;
 import classes.item.ItemDeRegeneracao;
