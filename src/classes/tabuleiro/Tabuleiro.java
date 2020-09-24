@@ -49,7 +49,7 @@ public class Tabuleiro {
         }
     }
 
-    public void colocarMuro() {
+    private void colocarMuro() {
         int linha, coluna;
         for (linha = 0; linha < 10; linha++) {
             for (coluna = 0; coluna < 10; coluna++) {
@@ -60,7 +60,7 @@ public class Tabuleiro {
         }
     }
 
-    public void colocarMonstros() {
+    private void colocarMonstros() {
         int quantidadeDeMonstrosColocados = 0;
         while (quantidadeDeMonstrosColocados < this.quantidadeDeMonstros) {
             int x = numeroAleatorio(10);
@@ -86,7 +86,7 @@ public class Tabuleiro {
         }
     }
 
-    public void colocarItemDeRegeneracao(int quantidadeDeItensDeRegeneracao) {
+    private void colocarItemDeRegeneracao(int quantidadeDeItensDeRegeneracao) {
         int quantidadeDeItensColocados = 0;
 
         while (quantidadeDeItensColocados < quantidadeDeItensDeRegeneracao) {
@@ -100,7 +100,7 @@ public class Tabuleiro {
         }
     }
 
-    public void colocarProtagonista() {
+    private void colocarProtagonista() {
         int x = numeroAleatorio(10), y = numeroAleatorio(10);
         while (tabuleiro[y][x] != null) {
             x = numeroAleatorio(10);
@@ -109,7 +109,7 @@ public class Tabuleiro {
         tabuleiro[y][x] = protagonista = new Protagonista(x, y);
     }
 
-    public void moverInstanciaDoPersonagem(int y, int x){
+    private void moverInstanciaDoPersonagem(int y, int x){
         tabuleiro[this.protagonista.getY()][this.protagonista.getX()] = tabuleiro[y][x];
         tabuleiro[y][x] = null;
     }
