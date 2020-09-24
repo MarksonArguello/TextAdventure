@@ -22,13 +22,13 @@ public class Protagonista extends Entidade implements EntidadesQueCausamDano {
     public int andar(String direcao) {
         switch (direcao) {
             case "frente":
-                this.y++;
+                this.y--;
                 break;
             case "direita":
                 this.x++;
                 break;
             case "trás":
-                this.y--;
+                this.y++;
                 break;
             case "esquerda":
                 this.x--;
@@ -47,6 +47,7 @@ public class Protagonista extends Entidade implements EntidadesQueCausamDano {
 
     public void recuperarVida(ItemDeRegeneracao itemDeRegeneracao) {
         this.pontosDeVida += itemDeRegeneracao.getPontosDeRegenaracao();
+        if (this.pontosDeVida > 80) this.pontosDeVida = 80;
         System.out.println("Sua vida foi recuperada: " + this.pontosDeVida + " HP");
     }
 

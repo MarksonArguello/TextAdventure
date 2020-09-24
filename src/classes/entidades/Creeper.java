@@ -8,16 +8,15 @@ public class Creeper extends Monstro implements AnunciarAparecimento {
     public Creeper() {
         this.x = x;
         this.y = y;
-        this.danoDeAtaque = 40;
+        this.danoDeAtaque = 35;
         this.pontosDeVida = 25;
         this.tecnincaOfensiva = "explosão";
     }
 
     @Override
     public void atacar(Entidade entidade) {
-        System.out.println("O creeper atacou com "+ this.tecnincaOfensiva + "\nO creeper morreu");
+        System.out.println("O creeper atacou com "+ this.tecnincaOfensiva);
         entidade.pontosDeVida -= this.danoDeAtaque;
-        this.pontosDeVida = 0;
     }
 
     @Override

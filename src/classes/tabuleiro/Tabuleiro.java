@@ -32,10 +32,21 @@ public class Tabuleiro {
     public void verificarMonstros(){
         for (int linha = 0; linha < 10; linha++) {
             for (int coluna = 0; coluna < 10; coluna++) {
-                if (tabuleiro[linha][coluna] instanceof Monstro) {
-                    System.out.println(linha + " " + coluna);
-                }
+                if (tabuleiro[linha][coluna] == null)
+                    System.out.print(". ");
+                if (tabuleiro[linha][coluna] instanceof Monstro)
+                    System.out.print("M ");
+
+                if (tabuleiro[linha][coluna] instanceof Muro)
+                    System.out.print("X ");
+
+                if(tabuleiro[linha][coluna] instanceof ItemDeRegeneracao)
+                    System.out.print("P ");
+
+                if(linha == protagonista.getY() && coluna == protagonista.getX())
+                    System.out.print("J ");
             }
+            System.out.println();
         }
     }
 
@@ -55,21 +66,22 @@ public class Tabuleiro {
         while (quantidadeDeMonstrosColocados < this.quantidadeDeMonstros) {
             int x = numeroAleatorio(10);
             int y = numeroAleatorio(10);
-            if (tabuleiro[y][x] != null) {
+            if (tabuleiro[y][x] == null) {
                 quantidadeDeMonstrosColocados++;
                 int tipoDeMonstro = numeroAleatorio(4);
                 switch (tipoDeMonstro) {
-                    case 1:
+                    case 0:
                         tabuleiro[y][x] = new Aranha();
                         break;
-                    case 2:
+                    case 1:
                         tabuleiro[y][x] = new Creeper();
                         break;
-                    case 3:
+                    case 2:
                         tabuleiro[y][x] = new Esqueleto();
                         break;
-                    case 4:
+                    case 3:
                         tabuleiro[y][x] = new Zumbi();
+                        break;
                 }
             }
         }
@@ -80,21 +92,27 @@ public class Tabuleiro {
 
         while (quantidadeDeItensColocados < quantidadeDeItensDeRegeneracao) {
             quantidadeDeItensColocados++;
-            int x = numeroAleatorio(10);
-            int y = numeroAleatorio(10);
-            if (tabuleiro[y][x] != null) {
-                tabuleiro[y][x] = new ItemDeRegeneracao();
-            }
+            int x, y;
+            do {
+                x = numeroAleatorio(10);
+                y = numeroAleatorio(10);
+            } while(tabuleiro[y][x] != null);
+            tabuleiro[y][x] = new ItemDeRegeneracao();
         }
     }
 
     public void colocarProtagonista() {
         int x = numeroAleatorio(10), y = numeroAleatorio(10);
-        while (tabuleiro[y][x]  != null) {
+        while (tabuleiro[y][x] != null) {
             x = numeroAleatorio(10);
             y = numeroAleatorio(10);
         }
-        protagonista = new Protagonista(x, y);
+        tabuleiro[y][x] = protagonista = new Protagonista(x, y);
+    }
+
+    public void moverInstanciaDoPersonagem(int y, int x){
+        tabuleiro[this.protagonista.getY()][this.protagonista.getX()] = tabuleiro[y][x];
+        tabuleiro[y][x] = null;
     }
 
     public int atualizarPosicaoProtagonista(String direcao) {
@@ -102,8 +120,11 @@ public class Tabuleiro {
         if (this.protagonista.andar(direcao) == 0)
             return 0;
 
-        if (tabuleiro[this.protagonista.getY()][this.protagonista.getX()] == null)
+        if (tabuleiro[this.protagonista.getY()][this.protagonista.getX()] == null){
             System.out.println("Não há nada aqui ("+this.protagonista.getY()+","+this.protagonista.getX()+")");
+            moverInstanciaDoPersonagem(y, x);
+        }
+
 
         if(tabuleiro[this.protagonista.getY()][this.protagonista.getX()] instanceof Muro) {
             System.out.println("Há um muro a frente");
@@ -114,11 +135,17 @@ public class Tabuleiro {
             Monstro monstro = (Monstro) tabuleiro[this.protagonista.getY()][this.protagonista.getX()];
             if (!this.luta(monstro))
                 this.protagonista.retornarParaPosicaoAnterior(x, y);
+            else{
+                tabuleiro[this.protagonista.getY()][this.protagonista.getX()] = null;
+                moverInstanciaDoPersonagem(y, x);
+            }
+
         }
 
         if (tabuleiro[this.protagonista.getY()][this.protagonista.getX()] instanceof ItemDeRegeneracao) {
             ItemDeRegeneracao itemDeRegeneracao = (ItemDeRegeneracao) tabuleiro[this.protagonista.getY()][this.protagonista.getX()];
             this.protagonista.recuperarVida(itemDeRegeneracao);
+            moverInstanciaDoPersonagem(y, x);
         }
 
 
@@ -138,10 +165,13 @@ public class Tabuleiro {
             if (decisao.equals("fugir")) return false;
 
             this.protagonista.atacar(monstro);
-            System.out.println("Você feriu "+tipoMonstro+" (HP: "+monstro.getPontosDeVida()+")");
 
-            if (!monstro.morreu()) monstro.atacar(protagonista);
-            else {
+
+            if (!monstro.morreu()) {
+                System.out.println("Você feriu "+tipoMonstro+" (HP: "+monstro.getPontosDeVida()+")");
+                monstro.atacar(protagonista);
+            }
+            if(monstro.morreu()) {
                 this.quantidadeDeMonstros--;
                 System.out.println("Você matou "+tipoMonstro);
             }

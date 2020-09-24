@@ -27,7 +27,7 @@ public class Game {
             } while(tabuleiro.atualizarPosicaoProtagonista(acao) == 0);
         }
         if (tabuleiro.protagonista.morreu())
-            System.out.println("Game Over");
+            System.out.println("Você morreu\nGame Over");
         else
             System.out.println("Você Venceu");
     }
