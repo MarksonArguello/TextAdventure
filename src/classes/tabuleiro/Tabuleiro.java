@@ -7,7 +7,9 @@ import classes.ObjetosDoMapa;
 import classes.entidades.*;
 import classes.item.ItemDeRegeneracao;
 
-
+/**
+ * Classe que representa o tabuleiro.
+ */
 public class Tabuleiro {
     public Protagonista protagonista;
     static final int quantidadeDeEntidadesMaxima = 10;
@@ -15,6 +17,11 @@ public class Tabuleiro {
     Random geradorDeNumeroAleatorio = new Random();
     ObjetosDoMapa[][] tabuleiro = new ObjetosDoMapa[10][10];
 
+    /**
+     * Construtor de tabuleiro.
+     * @param quantidadeDeMonstros Quantidade de monstros que será colocado no tabuleiro.
+     * @param quantidadeDeItensDeRegeneracao Quantidade de itens de regeneração que será colocado no tabuleiro.
+     */
     public Tabuleiro(int quantidadeDeMonstros, int quantidadeDeItensDeRegeneracao) {
         quantidadeDeMonstros = Math.min(quantidadeDeMonstros, quantidadeDeEntidadesMaxima);
         quantidadeDeItensDeRegeneracao = Math.min(quantidadeDeItensDeRegeneracao, quantidadeDeEntidadesMaxima);
@@ -24,10 +31,21 @@ public class Tabuleiro {
         colocarItemDeRegeneracao(quantidadeDeItensDeRegeneracao);
         colocarProtagonista();
     }
+
+    /**
+     * Retorna um número aleatório.
+     * @param num Número máximo para retorno da função.
+     * @return Número aleatório entre [0,num).
+     */
     public int numeroAleatorio(int num) {
         return geradorDeNumeroAleatorio.nextInt(num);
     }
 
+    /**
+     * Mostra um mapa do jogo. Para usar digite 'monstros'.
+     * <p>J = protagonista, M = Monstro, X = Muro, P = Item de Regeneração</p>
+     *
+     */
     public void verificarMonstros(){
         for (int linha = 0; linha < 10; linha++) {
             for (int coluna = 0; coluna < 10; coluna++) {
@@ -49,6 +67,9 @@ public class Tabuleiro {
         }
     }
 
+    /**
+     * Coloca os muros envolta do tabuleiro.
+     */
     private void colocarMuro() {
         int linha, coluna;
         for (linha = 0; linha < 10; linha++) {
@@ -60,6 +81,9 @@ public class Tabuleiro {
         }
     }
 
+    /**
+     * Coloca monstros em posições aleatórias do tabuleiro.
+     */
     private void colocarMonstros() {
         int quantidadeDeMonstrosColocados = 0;
         while (quantidadeDeMonstrosColocados < this.quantidadeDeMonstros) {
@@ -86,6 +110,10 @@ public class Tabuleiro {
         }
     }
 
+    /**
+     * Coloca itens de regeneração em lugares aleatórios do tabuleiro.
+     * @param quantidadeDeItensDeRegeneracao Número de itens que serão colocados.
+     */
     private void colocarItemDeRegeneracao(int quantidadeDeItensDeRegeneracao) {
         int quantidadeDeItensColocados = 0;
 
@@ -100,6 +128,9 @@ public class Tabuleiro {
         }
     }
 
+    /**
+     * Coloca o protagonista em um lugar aleatório do tabuleiro.
+     */
     private void colocarProtagonista() {
         int x = numeroAleatorio(10), y = numeroAleatorio(10);
         while (tabuleiro[y][x] != null) {
@@ -109,11 +140,27 @@ public class Tabuleiro {
         tabuleiro[y][x] = protagonista = new Protagonista(x, y);
     }
 
+    /**
+     * Move a instancia do protagonista no tabuleiro.
+     *
+     * @param y Ponto y da posição no tabuleiro.
+     * @param x Ponto x da posição no tabuleiro
+     */
     private void moverInstanciaDoPersonagem(int y, int x){
         tabuleiro[this.protagonista.getY()][this.protagonista.getX()] = tabuleiro[y][x];
         tabuleiro[y][x] = null;
     }
 
+    /**
+     * Atualiza a posição do protagonista
+     * <p>
+     *     Como a posição do protagonista está na classe protagonista o método atualiza a posição
+     *     na classe do personagem, verifica se deu algum problema como encontrar um muro, caso sim ela não move a
+     *     instância do personagem caso não ela move usando o método moverInstânciaDoPersonagem.
+     * </p>
+     * @param direcao Direção que o protagonista vai ser movida
+     * @return Retorna 0 se a direção é inválida e 1 caso seja válida.
+     */
     public int atualizarPosicaoProtagonista(String direcao) {
         int x  = this.protagonista.getX(), y = this.protagonista.getY();
         if (this.protagonista.andar(direcao) == 0)
@@ -151,6 +198,11 @@ public class Tabuleiro {
         return 1;
     }
 
+    /**
+     * Método que é usado caso a ação seja lutar
+     * @param monstro Monstro que será enfrentado pelo protagonista.
+     * @return Retorna false caso o protagonista fuja e true caso a luta acabe.
+     */
     private boolean luta(Monstro monstro) {
         Scanner sc = new Scanner(System.in);
         String decisao;
@@ -177,6 +229,11 @@ public class Tabuleiro {
         }
         return true;
     }
+
+    /**
+     * Verifica se ainda tem monstros no mapa.
+     * @return Retorna um booleano true caso a quantidade de monstros seja 0 e false caso contrário.
+     */
     public boolean venceu() {
         return this.quantidadeDeMonstros == 0;
     }
