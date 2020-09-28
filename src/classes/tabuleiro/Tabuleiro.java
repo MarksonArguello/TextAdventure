@@ -11,11 +11,11 @@ import classes.item.ItemDeRegeneracao;
  * Classe que representa o tabuleiro.
  */
 public class Tabuleiro {
-    public Protagonista protagonista;
-    static final int quantidadeDeEntidadesMaxima = 10;
+    private Protagonista protagonista;
+    private static final int quantidadeDeEntidadesMaxima = 10;
     private int quantidadeDeMonstros;
-    Random geradorDeNumeroAleatorio = new Random();
-    ObjetosDoMapa[][] tabuleiro = new ObjetosDoMapa[10][10];
+    private Random geradorDeNumeroAleatorio = new Random();
+    private ObjetosDoMapa[][] tabuleiro = new ObjetosDoMapa[10][10];
 
     /**
      * Construtor de tabuleiro.
